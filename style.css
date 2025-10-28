@@ -1,0 +1,125 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+/* 選單（預設收起，hover / focus-within 或 .open 展開）*/
+#menu {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 8px;
+  border-radius: 8px;
+  width: 200px; /* 固定寬度 */
+  max-height: 300px; /* 限制選單高度 */
+  overflow-y: auto; /* 當內容超出時顯示滾動條 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* menu-handle 置於 list 之下，避免遮蔽（但仍可點擊以開啟） */
+#menu .menu-handle {
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  position: relative;
+  border-radius: 2px;
+  cursor: pointer;
+  z-index: 11001; /* handle 在 menu 上 */
+  transition: transform .18s ease;
+}
+
+/* 當展開時把 handle 略微移位，避免與第一個按鈕重疊 */
+#menu.open .menu-handle,
+#menu:hover .menu-handle {
+  transform: translateX(-6px);
+}
+
+/* 確保清單位於 handle 之上以接收點擊 */
+#menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .18s ease, transform .18s ease;
+  pointer-events: none;
+  width: 100%;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  z-index: 11002; /* list 在最上層，確保接收點擊 */
+}
+
+/* 當展開時讓 ul 可互動 */
+#menu:hover ul,
+#menu:focus-within ul,
+#menu.open ul {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* li 逐項跳出動畫（利用 --i 延遲） */
+#menu ul li {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .28s ease, transform .28s ease;
+  transition-delay: calc(var(--i) * 70ms);
+}
+#menu:hover ul li,
+#menu:focus-within ul li,
+#menu.open ul li {
+  opacity: 1;
+  transform: none;
+}
+
+/* 按鈕樣式 */
+#menu .menu-item {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+#menu .menu-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 允許觸控時點擊關閉 */
+#menu.open { box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+
+/* 調整滾動條外觀（Webkit） */
+#menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+#menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+#menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
